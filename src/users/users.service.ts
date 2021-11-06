@@ -8,19 +8,36 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  create(createUserDto: CreateUserDto) {
+  /*
+  async create(createUserDto: CreateUserDto) {
+    const user = await this.prisma.user.create({
+      data: {
+        email: createUserDto.email,
+        firstName: createUserDto.firstName,
+        lastName: createUserDto.lastName,
+        password: createUserDto.password,
+      },
+    });
+
     return 'This action adds a new user';
+  }
+  */
+
+  async create(data: Prisma.UserCreateInput): Promise<User> {
+    return this.prisma.user.create({
+      data,
+    });
   }
 
   findAll() {
     return `This action returns all users`;
   }
 
-  async findOne(email: string) {
+  async findOne(
+    userWhereUniqueInput: Prisma.UserWhereUniqueInput,
+  ): Promise<User | null> {
     const userByEmail = await this.prisma.user.findUnique({
-      where: {
-        email: 'ada@prisma.io',
-      },
+      where: userWhereUniqueInput,
     });
 
     return userByEmail;
